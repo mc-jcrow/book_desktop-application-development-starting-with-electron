@@ -6,17 +6,22 @@ const win_name = [
 ];
 
 ipcMain.handle('show-dialog', (event, arg) => {
-  let btns = ['OK', 'Cancel', 'わかりました', 'わかりません…。'];
-  let w = BrowserWindow.getFocusedWindow();
-  let re = dialog.showMessageBoxSync(w, {
+  const btns = ['OK', 'Cancel', 'わかりました', 'わかりません…。'];
+  const w = BrowserWindow.getFocusedWindow();
+  dialog.showMessageBox(w, {
+    type: 'info',
     title: 'Message',
     message: 'これがメッセージボックスの表示です。',
     detail: 'OKすると閉じます。',
-    buttons: btns
+    buttons: btns,
+    checkboxLabel: 'チェック！'
+  }).then((event) => {
+    if (event.checkboxChecked) {
+      w.webContents.executeJavaScript('alert("あなたはチェックボックスを選びました。")');
+    } else {
+      w.webContents.executeJavaScript('alert("あなたはチェックボックスを選びませんでした。")');
+    }
   });
-  console.log(btns[re]);
-  const result = btns[re];
-  return result;
 });
 
 function createWindow() {

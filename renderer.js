@@ -7,10 +7,6 @@ window.electron.helloIncrement((_event, value) => {
   counter.innerText = newValue
 })
 
-// function executeShowDialog() {
-//   const res = window.electron.showDialog();
-//   alert('あなたは、「' + res + '」を選びました。');
-// }
 function executeShowDialog() {
   window.electron.showDialog();
 }
