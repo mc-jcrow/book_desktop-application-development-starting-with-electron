@@ -51,7 +51,14 @@ function createMenu() {
       {
         label: 'File',
         submenu: [
-          isMac ? { role: 'close' } : { role: 'quit' }
+          isMac ? { role: 'close' } : { role: 'quit' },
+          {
+            label: 'HelloCount',
+            click: () => {
+              const w = BrowserWindow.getFocusedWindow();
+              w.webContents.send('hello-increment', 1);
+            }
+          }
         ]
       },
       // { role: 'editMenu' }
