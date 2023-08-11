@@ -1,16 +1,22 @@
-const { app, Menu, MenuItem, BrowserView, BrowserWindow, ipcMain } = require('electron');
+const { app, Menu, MenuItem, BrowserView, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('path');
 
 const win_name = [
   'banana', 'orange', 'apple'
 ];
 
-// レンダラープロセスから「hello」チャンネルへメッセージが届いたとき、
-// ウィンドウを開き、レンダラープロセスへメッセージを返す。
-ipcMain.handle('hello', (event, arg) => {
-  const result = createWindow();
-  const text = win_name[result % 3] + '-' + result;
-  return text;
+ipcMain.handle('show-dialog', (event, arg) => {
+  let btns = ['OK', 'Cancel', 'わかりました', 'わかりません…。'];
+  let w = BrowserWindow.getFocusedWindow();
+  let re = dialog.showMessageBoxSync(w, {
+    title: 'Message',
+    message: 'これがメッセージボックスの表示です。',
+    detail: 'OKすると閉じます。',
+    buttons: btns
+  });
+  console.log(btns[re]);
+  const result = btns[re];
+  return result;
 });
 
 function createWindow() {

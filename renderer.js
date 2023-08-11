@@ -7,6 +7,14 @@ window.electron.helloIncrement((_event, value) => {
   counter.innerText = newValue
 })
 
+// function executeShowDialog() {
+//   const res = window.electron.showDialog();
+//   alert('あなたは、「' + res + '」を選びました。');
+// }
+function executeShowDialog() {
+  window.electron.showDialog();
+}
+
 async function doit() {
     // preload.jsに定義したAPI（hello）でメインプロセスと通信する。
     // hello()内で使われている「ipcRenderer.invoke()」は非同期関数のため、
