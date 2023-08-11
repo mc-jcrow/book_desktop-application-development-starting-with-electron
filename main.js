@@ -6,21 +6,26 @@ const win_name = [
 ];
 
 ipcMain.handle('show-dialog', (event, arg) => {
-  const btns = ['OK', 'Cancel', 'わかりました', 'わかりません…。'];
+  const btns = ['正常です', '問題があります'];
   const w = BrowserWindow.getFocusedWindow();
   dialog.showMessageBox(w, {
     type: 'info',
     title: 'Message',
-    message: 'これがメッセージボックスの表示です。',
-    detail: 'OKすると閉じます。',
+    message: 'アプリケーションの動作に問題はないですか？',
     buttons: btns,
     checkboxLabel: 'チェック！'
   }).then((event) => {
-    if (event.checkboxChecked) {
-      w.webContents.executeJavaScript('alert("あなたはチェックボックスを選びました。")');
+    if (event.response == 1) {
+      dialog.showErrorBox('Caution!', '何か問題が発生しています。');
     } else {
-      w.webContents.executeJavaScript('alert("あなたはチェックボックスを選びませんでした。")');
+      w.webContents.executeJavaScript('alert("了解しました。")');
     }
+    // if (event.checkboxChecked) {
+    //   w.webContents.executeJavaScript('alert("あなたはチェックボックスを選びました。")');
+    // } else {
+    //   w.webContents.executeJavaScript('alert("あなたはチェックボックスを選びませんでした。")');
+    // }
+    
   });
 });
 
