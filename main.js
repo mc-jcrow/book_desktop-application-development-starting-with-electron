@@ -1,16 +1,11 @@
 const { app, Menu, MenuItem, BrowserView, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
-const win_name = [
-  'banana', 'orange', 'apple'
-];
-
-// レンダラープロセスから「hello」チャンネルへメッセージが届いたとき、
-// ウィンドウを開き、レンダラープロセスへメッセージを返す。
-ipcMain.handle('hello', (event, arg) => {
-  const result = createWindow();
-  const text = win_name[result % 3] + '-' + result;
-  return text;
+ipcMain.handle('read-file-sync', () => {
+  const fname = 'sample.txt';
+  const re = fs.readFileSync(fname).toString();
+  return re;
 });
 
 function createWindow() {

@@ -4,6 +4,6 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld(
     'electron',
     {
-        hello: (arg) => ipcRenderer.invoke('hello', arg)
+        readFileSync: () => ipcRenderer.invoke('read-file-sync')
     }
 );
