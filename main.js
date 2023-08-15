@@ -1,5 +1,27 @@
 const { app, Menu, MenuItem, BrowserView, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const https = require('https');
+
+// FirebaseからJSONデータを受け取る
+ipcMain.handle('http-get-json', async () => {
+  return new Promise((resolve, reject) => {
+    const url = 'https://data.corona.go.jp/converted-json/covid19japan-weekly-patients.json';
+    https.get(url, (res) => {
+      let data = '';
+      res.setEncoding('utf8');
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      res.on('end', () => {
+        const json_obj = JSON.parse(data);
+        console.log(json_obj);
+        resolve(json_obj);
+      });
+    }).on('error', (error) => {
+      reject(error);
+    });
+  });
+});
 
 function createWindow() {
     win = new BrowserWindow ({
