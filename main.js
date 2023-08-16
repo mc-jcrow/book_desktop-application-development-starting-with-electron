@@ -1,4 +1,4 @@
-const { app, Menu, MenuItem, BrowserView, BrowserWindow, ipcMain } = require('electron');
+const { app, Menu, MenuItem, BrowserView, BrowserWindow, ipcMain, net } = require('electron');
 const path = require('path');
 const https = require('https');
 
