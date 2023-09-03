@@ -1,9 +1,10 @@
-const { app, Menu, BrowserWindow } = require('electron');
+const { app, Menu, BrowserWindow, dialog } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 function createWindow() {
     win = new BrowserWindow ({
-        width: 1000,
+        width: 1200,
         height: 800,
         webPreferences: {
           preload: path.join(__dirname, 'preload.js')
@@ -74,7 +75,14 @@ function createMenu() {
           { label: '16', click: () => setFontSize(16) },
           { label: '18', click: () => setFontSize(18) },
           { label: '20', click: () => setFontSize(20) },
-          { label: '24', click: () => setFontSize(24) }      ]
+          { label: '24', click: () => setFontSize(24) }
+        ]
+      },
+      {
+        label: 'New',
+        submenu: [
+          { label: 'Open folder...', click: () => openfolder() }
+        ]
       },
       {
         label: 'Edit',
@@ -174,6 +182,28 @@ function setMode(mname) {
 function setFontSize(n) {
   let w = BrowserWindow.getFocusedWindow();
   w.webContents.executeJavaScript('setFontSize(' + n + ')');
+}
+
+// openfolder関数を追加する
+function openfolder() {
+  let w = BrowserWindow.getFocusedWindow();
+  // w.webContents.executeJavaScript('openfolder()');
+  let result = dialog.showOpenDialogSync(w, {
+      properties: ['openDirectory']
+  });
+  if (result != undefined) {
+    let folder_path = result[0];
+    folder_path = folder_path.replace(/[\\¥]/g, '/');
+    w.webContents.executeJavaScript('changeFooter("' + folder_path + '")');
+    loadPath(folder_path);
+  }
+}
+
+function loadPath(folder_path) {
+  let w = BrowserWindow.getFocusedWindow();
+  fs.readdir(folder_path, (err, files) => {
+    w.webContents.executeJavaScript('changeSidebar("' + files + '")');
+  });
 }
 
 app.whenReady().then(createWindow);
