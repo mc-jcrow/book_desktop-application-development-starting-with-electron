@@ -31,7 +31,7 @@ function setFontSize(n) {
     editor.setFontSize(n);
 }
 
-function changeFooter(folder_path) {
+function changeFooterTextContent(folder_path) {
     footer.textContent = 'open dir:"' + folder_path + '".';
 }
 
@@ -43,4 +43,13 @@ function changeSidebar(files) {
     }
     tag += '</ul>';
     sidebar.innerHTML = tag;
+}
+
+function changeEditorDocument(data) {
+    editor.session.getDocument().setValue(data);
+}
+
+function openfile(n) {
+    console.log(n);
+    window.electron.openfile(n);
 }
